@@ -16,7 +16,7 @@ function checksExistsUserAccount(request, response, next) {
   const checkIfUserExists = users.find(user => user.username === username)
 
   if (!checkIfUserExists) {
-    return response.status(404)
+    return response.status(404).json({error:'User not found'});
   }
 
   request.user = checkIfUserExists
@@ -33,7 +33,7 @@ function checksCreateTodosUserAvailability(request, response, next) {
     return next()
   }
 
-  return response.status(403)
+  return response.status(403).json({error:'usuario não atende os requisitos'});
 }
 
 function checksTodoExists(request, response, next) {
@@ -43,18 +43,18 @@ function checksTodoExists(request, response, next) {
 
   const user = users.find(user => user.username === username)
   if (!user) {
-    return response.status(404)
+    return response.status(404).json({error:'User not found'})
   }
   const isUuid = validate(id);
   
   if (!isUuid) {
-      return response.status(400)
+      return response.status(400).json({error:'Is not UUID'});
   }
 
-  const hasTodo = user.todos.findIndex(todo => todo.id===id)
+  const hasTodo = user.todos.find(todo => todo.id===id)
   
   if (!hasTodo){
-    return response.status(404)
+    return response.status(404).json({error:'Todo not found'})
   }
 
   request.user = user
@@ -69,7 +69,7 @@ function findUserById(request, response, next) {
   const user = users.find(user => user.id === id)
 
   if (!user) {
-    return response.status(404)
+    return response.status(404).json({message:'user not found'})
   }
 
   request.user = user
