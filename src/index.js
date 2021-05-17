@@ -46,18 +46,19 @@ function checksTodoExists(request, response, next) {
     return response.status(404)
   }
   const isUuid = validate(id);
-  if (!isUuid) {
-    return response.status(404)
-  }
-
-  const hasTodo = user.todos.findIndex(todo => todo.id===id) 
   
-  if (hasTodo=== -1){
+  if (!isUuid) {
+      return response.status(400)
+  }
+
+  const hasTodo = user.todos.findIndex(todo => todo.id===id)
+  
+  if (!hasTodo){
     return response.status(404)
   }
 
-  request.user = user;
-  request.todo = user.todos[hasTodo];
+  request.user = user
+  request.todo = hasTodo
   return next()
 }
 
